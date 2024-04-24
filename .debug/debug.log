@@ -1,0 +1,9 @@
+DEBUG_MODE ACTIVE
+Downloaded 2.1.02 by uri: https://sipi.usc.edu/database/download.php?vol=aerials&img=2.1.02
+Stored input image.
+Stored CPU processed image.
+Compressed size: 65536.
+Num of grid: 64.
+Stored CUDA processed image.
+Done: 1 images compression.
+1bins saved to ./.debug/
