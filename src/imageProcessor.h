@@ -29,6 +29,7 @@ using namespace cv;
 
 __constant__ int baseBlockSize;
 __constant__ int dataLen;
+#if defined TEST_MODE || defined DEBUG_MODE
 const string dataPath = "./data/";
 const string sitePermaLink = "https://sipi.usc.edu/database/download.php?vol=aerials&img=";
 const string extension = ".tiff";
@@ -71,9 +72,46 @@ const string imageList[] = {
     "3.2.25",
     "wash-ir"
 };
+#endif
 
 // :MARK: Functions declaration
 
+__host__ inline bool fileExistTest(const string& name);
+__host__ inline void checkCUDAerror(cudaError_t err);
+
+__host__ bool downloadSingleFile(string fName, string Url);
+__host__ tuple<int, uchar *, uchar *, uchar *> readImageFile(string fileName, int blockSize);
+__host__ void SaveReadyBins(uchar *R, uchar *G, uchar *B, int *originalImgSizes, int numImages, const char* outputPath);
+
+__device__ int mergeColor(uchar a1, uchar a2, uchar b1, uchar b2);
+__device__ int calculateCurrentShift();
+__device__ int calculateId(int Shift);
+__device__ int calculateFirstInx();
+__device__ int calculateSecondInx(int FirstInx);
+__global__ void mipMapping(
+    uchar *deviceInputR, 
+    uchar *deviceInputG, 
+    uchar *deviceInputB, 
+    uchar *deviceOutputR, 
+    uchar *deviceOutputG, 
+    uchar *deviceOutputB
+    );
+
+__host__ void cleanUpDevice(
+    uchar *deviceInputR, 
+    uchar *deviceInputG, 
+    uchar *deviceInputB, 
+    uchar *deviceOutputR, 
+    uchar *deviceOutputG, 
+    uchar *deviceOutputB
+    );
 
 
+#ifdef DEBUG_MODE
+__host__ void saveImageBatch(uchar *R, uchar *G, uchar *B, string Name, int batchSize);
+__host__ void createCPUBatch(uchar *R, uchar *G, uchar *B, string Name, int batchSize);
+#endif
 
+#ifdef TEST_MODE
+__host__ bool loadTestData();
+#endif
