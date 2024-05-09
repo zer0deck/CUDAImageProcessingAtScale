@@ -1,4 +1,4 @@
-# CUDImageProcessingAtScale
+# CUDAImageProcessingAtScale
 
 This is project for course CUDA at Scale for the Enterprise.
 
